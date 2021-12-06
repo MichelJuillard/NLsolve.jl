@@ -26,6 +26,10 @@ function nlsolve(df::Union{NonDifferentiable, OnceDifferentiable},
         trust_region(df, initial_x, xtol, ftol, iterations,
                      store_trace, show_trace, extended_trace, factor,
                      autoscale)
+    elseif method == :robust_trust_region
+        robust_trust_region(df, initial_x, xtol, ftol, iterations,
+                            store_trace, show_trace, extended_trace, factor,
+                            autoscale)
     elseif method == :anderson
         anderson(df, initial_x, xtol, ftol, iterations,
                  store_trace, show_trace, extended_trace, m, beta, aa_start, droptol)
