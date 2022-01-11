@@ -95,7 +95,7 @@ function robust_trust_region_(df::OnceDifferentiable,
 
             @trustregiontrace euclidean(cache.x, cache.xold)
             if any(isnan, cache.x) || any(isnan, value(df))
-                throw DomainError
+                throw(DomainError(isnan, "domain error in the model"))
             end
         catch e
             @show e
@@ -122,16 +122,16 @@ function robust_trust_region_(df::OnceDifferentiable,
                          first(df.f_calls), first(df.df_calls))
 end
 
-function trust_region(df::OnceDifferentiable,
-                      initial_x::AbstractArray{T},
-                      xtol::Real,
-                      ftol::Real,
-                      iterations::Integer,
-                      store_trace::Bool,
-                      show_trace::Bool,
-                      extended_trace::Bool,
-                      factor::Real,
-                      autoscale::Bool,
-                      cache = NewtonTrustRegionCache(df)) where T
-    trust_region_(df, initial_x, convert(real(T), xtol), convert(real(T), ftol), iterations, store_trace, show_trace, extended_trace, convert(real(T), factor), autoscale, cache)
+function robust_trust_region(df::OnceDifferentiable,
+                             initial_x::AbstractArray{T},
+                             xtol::Real,
+                             ftol::Real,
+                             iterations::Integer,
+                             store_trace::Bool,
+                             show_trace::Bool,
+                             extended_trace::Bool,
+                             factor::Real,
+                             autoscale::Bool,
+                             cache = NewtonTrustRegionCache(df)) where T
+    robust_trust_region_(df, initial_x, convert(real(T), xtol), convert(real(T), ftol), iterations, store_trace, show_trace, extended_trace, convert(real(T), factor), autoscale, cache)
 end
